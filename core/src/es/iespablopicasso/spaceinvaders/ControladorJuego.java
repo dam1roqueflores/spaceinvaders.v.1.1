@@ -53,6 +53,9 @@ public class ControladorJuego {
     //Por último un objeto RafagaEnemiga para almacenar disparos enemigos
     RafagaEnemigos disparosEmpire;
 
+    // Ovni de Atrezo
+    OvniAtrezo atrezo;
+
     /////////////////////////////////////////////////////////////////////////////////////
     //
     //COMPORTAMIENTO
@@ -104,6 +107,9 @@ public class ControladorJuego {
 
             //Pintar los disparos enemigos
             disparosEmpire.pintarse(batch);
+
+            //Pintar ovni atrezo
+            atrezo.pintarse(batch);
         } else {
             //Pantalla inicial
             dibujarPantallaInicial();
@@ -135,6 +141,8 @@ public class ControladorJuego {
         //Fondo de pantalla
         escena.dispose();
 
+        //Ovni Atrezzo
+        atrezo.dispose();
 
     }
 
@@ -186,6 +194,9 @@ public class ControladorJuego {
 
         //Movemos disparos enemigos
         disparosEmpire.moverse();
+
+        // Movemos OvniAtrezo
+        atrezo.moverse();
 
         //Calculamos colisiones
 
@@ -254,6 +265,9 @@ public class ControladorJuego {
 
         //Lo mismo con los disparos enemigos
         disparosEmpire = new RafagaEnemigos(Gdx.graphics.getHeight());
+
+        // creamos ovni atrezo
+        atrezo = new OvniAtrezo();
     }
 
     private void dibujarPantallaInicial() {
@@ -262,6 +276,9 @@ public class ControladorJuego {
 
         //Pintar el batallón enemigo
         empire.pintarse(batch);
+
+        // Pintar ovni atrezo
+        atrezo.pintarse(batch);
     }
 }
 

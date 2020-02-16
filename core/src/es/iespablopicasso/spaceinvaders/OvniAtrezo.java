@@ -8,13 +8,14 @@ public class OvniAtrezo extends ObjetoVolador {
     //
     //ESTADO
     //
-    /////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////
 
-    //Sólo necesita una Texture
-    protected boolean explotar;
     protected int pasos;
+    protected int inc=1;
+    protected Texture imgatrezo;
 
     public static final int PASOS_EXP = 20;
+    public static final int VELOCIDAD_Y = 2;
 
 
     /////////////////////////////////////////////////////////////////////////////////////
@@ -25,17 +26,19 @@ public class OvniAtrezo extends ObjetoVolador {
 
 
     //CONSTRUCTORES
-    public NaveEspacial() {
+    public OvniAtrezo() {
         super();
-        imgExplosion = null;
-        explotar = false;
+        posX=20;
+        posY=20;
+        velX=0;
+        velY=VELOCIDAD_Y;
+        imgatrezo=new Texture("OvniAtrezo.png");
         pasos = 0;
     }
 
-    public NaveEspacial(float nuevaPosX,float nuevaPosY,float nuevaVelX, float nuevaVelY,String nombreImg,String explosionString) {
-        super(nuevaPosX, nuevaPosY, nuevaVelX, nuevaVelY, nombreImg);
-        imgExplosion = new Texture(explosionString);
-        explotar = false;
+    public OvniAtrezo(float nuevaPosX,float nuevaPosY,float nuevaVelX, String nombreImg) {
+        super(nuevaPosX, nuevaPosY, nuevaVelX, VELOCIDAD_Y, nombreImg);
+        velX=0;
     }
 
     //Resto de comportamiento
@@ -43,30 +46,17 @@ public class OvniAtrezo extends ObjetoVolador {
     //Modificamos el método pintarse, para que en caso de necesitar pintar una explosión, lo haga
     @Override
     public void pintarse(SpriteBatch miSB) {
-        if (explotar) {
-            pasos++;
-            if (pasos < PASOS_EXP) {
-                miSB.begin();
-                miSB.draw(imgExplosion, posX - anchoDiv2, posY - altoDiv2);
-                miSB.end();
-            }
-        } else {
             super.pintarse(miSB);
+    }
+    public void moverse(SpriteBatch miSB) {
+        if (Math.random()>0.5) {
+            inc=-inc;
         }
+        velX=velX+inc;
+        if (velX>5) { velX=5;}
+        if (velX<-5) {velX=-5;}
+        super.moverse();
+
     }
-
-    //Modificamos el método de liberación de recursos para que tenga en cuenta la nueva
-    //texture disponible
-    @Override
-    public void dispose() {
-        super.dispose();
-        if (imgExplosion != null) imgExplosion.dispose();
-    }
-
-
-
-
-
-
-
 }
+
