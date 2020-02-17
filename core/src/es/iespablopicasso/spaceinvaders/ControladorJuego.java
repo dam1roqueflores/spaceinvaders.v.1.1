@@ -267,10 +267,16 @@ public class ControladorJuego {
         disparosEmpire = new RafagaEnemigos(Gdx.graphics.getHeight());
 
         // creamos ovni atrezo
-        atrezo = new OvniAtrezo();
+        atrezo = new OvniAtrezo( 100f);
     }
 
     private void dibujarPantallaInicial() {
+        float miX;
+
+
+        miX=(float) (Math.random()*1000);
+
+
         //renderizar imágenes
         xwing.pintarse(batch);
 
@@ -278,7 +284,14 @@ public class ControladorJuego {
         empire.pintarse(batch);
 
         // Pintar ovni atrezo
-        atrezo.pintarse(batch);
+        if (atrezo.getPosY()>Gdx.graphics.getHeight()) {
+            atrezo.dispose();
+            atrezo = new OvniAtrezo( miX);
+        } else {
+            atrezo.pintarse(batch);
+            atrezo.moverse();
+        }
+
     }
 }
 
