@@ -43,15 +43,15 @@ public class Bonus extends ObjetoVolador {
         cuenta=cuenta+1;
         super.moverse();
 
-        if (contador % 2 == 0) {
+        if (cuenta % 2 == 0) {
             if (velX <= 0){
                 incremento = incremento - 1
             } else if (velX>0)
                 incremento=incremento+1;
             }
-        }
         velX+=incremento;
-        if (velX>8) { velX=5;}
-        if (velX<-8) {velX=-5;}
+        if (velX>8) { velX=8;}
+        if (velX<-8) {velX=-8;}
+    }
 }
 
