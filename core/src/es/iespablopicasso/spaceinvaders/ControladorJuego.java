@@ -39,7 +39,9 @@ public class ControladorJuego {
     SpriteBatch batch;
 
     //Nuestra nave principal...
-    NavesAliadas xwing;
+  //  NavesAliadas xwing;
+
+    EscuadronAliado jugadores;
 
     //El estado del teclado
     EstadoTeclado et;
@@ -56,6 +58,8 @@ public class ControladorJuego {
     // Ovni de Atrezo
     OvniAtrezo atrezo;
 
+    // Bonus
+    Bonus regalo;
     /////////////////////////////////////////////////////////////////////////////////////
     //
     //COMPORTAMIENTO
@@ -97,7 +101,8 @@ public class ControladorJuego {
             escena.render(batch);
 
             //renderizar imágenes
-            xwing.pintarse(batch);
+          //  xwing.pintarse(batch);
+            jugadores.pintarse(batch);
 
             //Pintar el batallón enemigo
             empire.pintarse(batch);
@@ -110,6 +115,9 @@ public class ControladorJuego {
 
             //Pintar ovni atrezo
             atrezo.pintarse(batch);
+
+            // dibujar bonus
+            regalo.pintarse(batch);
         } else {
             //Pantalla inicial
             dibujarPantallaInicial();
@@ -127,7 +135,8 @@ public class ControladorJuego {
         }
 
         //Nave principal
-        xwing.dispose();
+        //xwing.dispose();
+        jugadores.dispose();
 
         //Batallón
         empire.dispose();
@@ -143,6 +152,9 @@ public class ControladorJuego {
 
         //Ovni Atrezzo
         atrezo.dispose();
+
+        //Bonus
+        regalo.dispose();
 
     }
 
@@ -167,7 +179,10 @@ public class ControladorJuego {
         if (recienTocado) {
             et.simulaTeclado(Gdx.input.getX(), Gdx.input.getY());
             if (et.isTeclaArriba()) { //Tenemos que disparar
-                disparosAliados.crearDisparo(xwing.getPosX(), xwing.getPosY());
+                // disparosAliados.crearDisparo(xwing.getPosX(), xwing.getPosY());
+                for (NavesAliadas minave:jugadores.listaAlia){
+                    disparosAliados.crearDisparo(minave.getPosX(), minave.getPosY());
+                }
             }
         }
 
@@ -176,7 +191,10 @@ public class ControladorJuego {
 
 
         //Movemos la nave
-        xwing.moverse(et); //nos movemos con respecto a lo que indiquen las teclas pulsadas
+ //        xwing.moverse(et); //nos movemos con respecto a lo que indiquen las teclas pulsadas
+        for (NavesAliadas minave:jugadores.listaAlia){
+            minave.moverse(et); //nos movemos con respecto a lo que indiquen las teclas pulsadas
+        }
 
 
         //Movemos las naves enemigas
@@ -198,6 +216,9 @@ public class ControladorJuego {
         // Movemos OvniAtrezo
         atrezo.moverse();
 
+        //Movemos bonus
+        regalo.moverse();
+
         //Calculamos colisiones
 
         //Mis disparos contra mis enemigos
@@ -209,7 +230,22 @@ public class ControladorJuego {
 
         } else {
             //Disparos enemigos contra mí
-            if (disparosEmpire.colisiona(xwing)) {
+            for (NavesAliadas minave:jugadores.listaAlia) {
+                if (disparosEmpire.colisiona(minave)) {
+                    //Me mataron
+                    minave.explota();
+                    //mostrar msg
+                    estadoJuego = PANTALLA_INICIO;
+                }
+                //Enemigos contra mí
+                if (empire.colisiona(minave)) {
+                    //Me mataron
+                    minave.explota();
+                    //mostrar msg
+                    estadoJuego = PANTALLA_INICIO;
+                }
+            }
+/*            if (disparosEmpire.colisiona(xwing)) {
                 //Me mataron
                 xwing.explota();
                 //mostrar msg
@@ -220,10 +256,8 @@ public class ControladorJuego {
                 //Me mataron
                 xwing.explota();
                 //mostrar msg
-                estadoJuego = PANTALLA_INICIO;
-            }
+                estadoJuego = PANTALLA_INICIO;*/
         }
-
     }
 
     private void controlEstadoPantallaInicio() {
@@ -255,8 +289,8 @@ public class ControladorJuego {
         et = new EstadoTeclado(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         //Creo la nave principal
-        xwing = new NavesAliadas(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / INDICE_POSICION_XWING, (short) Gdx.graphics.getWidth());
-
+        //xwing = new NavesAliadas(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / INDICE_POSICION_XWING, (short) Gdx.graphics.getWidth());
+        jugadores = new EscuadronAliado(et, (short) INDICE_POSICION_XWING);
         //Creo el batallón
         empire = new Batallon(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
@@ -268,17 +302,24 @@ public class ControladorJuego {
 
         // creamos ovni atrezo
         atrezo = new OvniAtrezo( 100f);
+
+        // creamos regalo
+        regalo = new Bonus(100f);
     }
 
     private void dibujarPantallaInicial() {
-        float miX;
+        float atrezoX, regaloX;
 
 
-        miX=(float) (Math.random()*1000);
+        atrezoX=(float) (Math.random()*(Gdx.graphics.getWidth()-8));
+        regaloX=(float) (Math.random()*(Gdx.graphics.getWidth()-8));
 
 
         //renderizar imágenes
-        xwing.pintarse(batch);
+        //xwing.pintarse(batch);
+        for (NavesAliadas minave :jugadores.listaAlia) {
+            minave.pintarse(batch);
+        }
 
         //Pintar el batallón enemigo
         empire.pintarse(batch);
@@ -286,12 +327,19 @@ public class ControladorJuego {
         // Pintar ovni atrezo
         if (atrezo.getPosY()>Gdx.graphics.getHeight()) {
             atrezo.dispose();
-            atrezo = new OvniAtrezo( miX);
+            atrezo = new OvniAtrezo( atrezoX);
         } else {
             atrezo.pintarse(batch);
             atrezo.moverse();
         }
-
+        // Pintar Bonus
+        if (regalo.getPosY()<0) {
+            regalo.dispose();
+            regalo = new Bonus( regaloX);
+        } else {
+            regalo.pintarse(batch);
+            regalo.moverse();
+        }
     }
 }
 

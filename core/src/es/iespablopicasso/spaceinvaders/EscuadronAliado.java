@@ -1,5 +1,6 @@
 package es.iespablopicasso.spaceinvaders;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class EscuadronAliado {
     /////////////////////////////////////////////////////////////////////////////////////
 
     //CONSTRUCTORES
-    public EscuadronAliado(EstadoTeclado et, short anchoPantalla) {
+    public EscuadronAliado(EstadoTeclado et, short indiceNavesXwing) {
         byte i; //contador básico
         NavesAliadas jugador; //Para ir creando y añadiendo
 
@@ -38,25 +39,26 @@ public class EscuadronAliado {
 
         //Creamos y añadimos los enemigos...
         for (i=0;i<NUM_NAVES_ALIADAS;i++) {
-            jugador = new NavesAliadas((float)((i+1)*40),0,anchoPantalla);
+            jugador = new NavesAliadas((float)((i+1)*40), (float) Gdx.graphics.getBackBufferHeight()/indiceNavesXwing, (short) Gdx.graphics.getWidth());
             listaAlia.add(jugador);
         }
     }
 
     public void pintarse(SpriteBatch miSB) {
-        int i;
-
-        for (i=0; i < listaAlia.size();i++) {
-            listaAlia.get(i).pintarse(miSB);
+        for (NavesAliadas minave :listaAlia) {
+            minave.pintarse(miSB);
         }
     }
 
     //Resto de comportamiento
     public void moverse(EstadoTeclado et) {
-        int i;
-
-        for (i=0; i<listaAlia.size();i++){
-            listaAlia.get(i).moverse(et);
+        for (NavesAliadas minave :listaAlia) {
+            minave.moverse(et);
+        }
+    }
+    public void dispose(){
+        for (NavesAliadas minave :listaAlia) {
+            minave.dispose();
         }
     }
 }

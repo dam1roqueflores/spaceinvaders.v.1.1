@@ -1,5 +1,6 @@
 package es.iespablopicasso.spaceinvaders;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Bonus extends ObjetoVolador {
@@ -12,9 +13,9 @@ public class Bonus extends ObjetoVolador {
     static private final String NOMBRE_SPRITE = "Bonus.png";
     static private final float VELOCIDAD_Y = -2.0f;
     static private final float VELOCIDAD_X = 8.0f;
-    static private final float POS_INICIAL_Y=0.0f;
+    static private final float POS_INICIAL_Y= Gdx.graphics.getHeight();
     private int incremento = -1;
-    private int cuenta =0;
+    private boolean par =false;
 
 
     /////////////////////////////////////////////////////////////////////////////////////
@@ -40,18 +41,15 @@ public class Bonus extends ObjetoVolador {
       }
     public void moverse() {
 
-        cuenta=cuenta+1;
         super.moverse();
-
-        if (cuenta % 2 == 0) {
-            if (velX <= 0){
-                incremento = incremento - 1
-            } else if (velX>0)
-                incremento=incremento+1;
+        if (par) {
+            velX+=incremento;
+            if (velX>7 || velX<-7) {
+                incremento=-incremento;
             }
-        velX+=incremento;
-        if (velX>8) { velX=8;}
-        if (velX<-8) {velX=-8;}
+
+        }
+        par=!par;
     }
 }
 
