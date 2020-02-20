@@ -59,7 +59,8 @@ public class ControladorJuego {
     OvniAtrezo atrezo;
 
     // Bonus
-    Bonus regalo;
+    //Bonus regalo;
+    EscuadronBonus regalos;
     /////////////////////////////////////////////////////////////////////////////////////
     //
     //COMPORTAMIENTO
@@ -117,7 +118,7 @@ public class ControladorJuego {
             atrezo.pintarse(batch);
 
             // dibujar bonus
-            regalo.pintarse(batch);
+            regalos.pintarse(batch);
         } else {
             //Pantalla inicial
             dibujarPantallaInicial();
@@ -154,7 +155,7 @@ public class ControladorJuego {
         atrezo.dispose();
 
         //Bonus
-        regalo.dispose();
+        regalos.dispose();
 
     }
 
@@ -217,7 +218,7 @@ public class ControladorJuego {
         atrezo.moverse();
 
         //Movemos bonus
-        regalo.moverse();
+        regalos.moverse();
 
         //Calculamos colisiones
 
@@ -304,7 +305,7 @@ public class ControladorJuego {
         atrezo = new OvniAtrezo( 100f);
 
         // creamos regalo
-        regalo = new Bonus(100f);
+        regalos = new EscuadronBonus();
     }
 
     private void dibujarPantallaInicial() {
@@ -333,13 +334,17 @@ public class ControladorJuego {
             atrezo.moverse();
         }
         // Pintar Bonus
-        if (regalo.getPosY()<0) {
-            regalo.dispose();
-            regalo = new Bonus( regaloX);
-        } else {
-            regalo.pintarse(batch);
-            regalo.moverse();
+        for (Bonus mibonus :regalos.listaBonus) {
+            if (mibonus.getPosY() < 0) {
+                mibonus.dispose();
+            } else {
+                mibonus.pintarse(batch);
+                mibonus.moverse();
+            }
         }
+        /*if (regalos.listaBonus.size()==0) {
+            regalos =  new EscuadronBonus();
+        }*/
     }
 }
 
