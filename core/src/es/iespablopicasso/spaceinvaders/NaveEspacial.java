@@ -78,4 +78,5 @@ public class NaveEspacial extends ObjetoVolador {
         anchoDiv2 = imgExplosion.getWidth()/2.0f;
         altoDiv2 = imgExplosion.getHeight()/2.0f;
     }
+
 }

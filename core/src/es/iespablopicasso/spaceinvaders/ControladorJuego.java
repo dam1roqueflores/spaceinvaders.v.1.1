@@ -218,7 +218,8 @@ public class ControladorJuego {
         atrezo.moverse();
 
         //Movemos bonus
-        regalos.moverse();
+        pintaBonus();
+
 
         //Calculamos colisiones
 
@@ -334,6 +335,10 @@ public class ControladorJuego {
             atrezo.moverse();
         }
         // Pintar Bonus
+            pintaBonus();
+    }
+    private void pintaBonus() {
+        // Pintar Bonus
         for (Bonus mibonus :regalos.listaBonus) {
             if (mibonus.getPosY() < 0) {
                 mibonus.dispose();
@@ -342,9 +347,12 @@ public class ControladorJuego {
                 mibonus.moverse();
             }
         }
-        /*if (regalos.listaBonus.size()==0) {
+        if (regalos.listaBonus.get(0).posY<0) {
             regalos =  new EscuadronBonus();
-        }*/
+        }
     }
 }
+
+
+
 
