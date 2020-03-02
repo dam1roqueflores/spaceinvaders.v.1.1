@@ -12,10 +12,11 @@ public class OvniAtrezo extends ObjetoVolador {
     ///////////////////////////////////////////////////////////////////////////////////
 
     static private final String NOMBRE_SPRITE = "OvniAtrezo.png";
-    static private final float VELOCIDAD_Y = 2.0f;
+    static private final float VELOCIDAD_Y = 4.0f;
     static private final float VELOCIDAD_X = 0.0f;
     static private final float POS_INICIAL_Y=0.0f;
 
+    private int incY=-1;
 
     /////////////////////////////////////////////////////////////////////////////////////
     //
@@ -39,25 +40,32 @@ public class OvniAtrezo extends ObjetoVolador {
         super.pintarse(miSB);
       }
     public void moverse() {
-        float valor;
-        int inc;
-
-        valor = (float) Math.random();
-
+        float incX;
+        float resultador;
+        float resultador2;
         super.moverse();
 
-        if (valor<0.33) {
-            inc=1;
-        } else {
-            if (valor>0.66) {
-                inc=-1;
-            } else {
-                inc=0;
-            }
+// comprobamos los límites de velocidad Y
+        if (velY>=4) {
+            velY=4;
+            incY=-incY;
         }
-        velX+=inc;
-        if (velX>5) { velX=5;}
-        if (velX<-5) {velX=-5;}
+        if (velY<=-2) {
+            velY=-2;
+            incY=-incY;
+        }
+        resultador2=velY+incY;
+        velY+=incY;
+
+        // comprobamos los limites de velocidad X
+        if (Math.random()>0.5){
+            incX=-1;
+        } else {
+            incX=1;
+        }
+        resultador=(float) (Math.random()+Math.random())*incX;
+        velX=resultador;
+
     }
 }
 

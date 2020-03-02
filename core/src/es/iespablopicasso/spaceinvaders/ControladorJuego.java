@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -56,7 +57,8 @@ public class ControladorJuego {
     RafagaEnemigos disparosEmpire;
 
     // Ovni de Atrezo
-    OvniAtrezo atrezo;
+    //OvniAtrezo atrezo;
+    GrupoDeAtrezo listaOvnis;
 
     // Bonus
     //Bonus regalo;
@@ -84,6 +86,7 @@ public class ControladorJuego {
 
     //El controlador tendrá que saber que pasa cuando hay que pintarse
     public void render() {
+
 
         //Primero realizo el control de estado.
         this.controlEstado();
@@ -115,7 +118,8 @@ public class ControladorJuego {
             disparosEmpire.pintarse(batch);
 
             //Pintar ovni atrezo
-            atrezo.pintarse(batch);
+            listaOvnis.pintarse(batch);
+
 
             // dibujar bonus
             regalos.pintarse(batch);
@@ -152,7 +156,8 @@ public class ControladorJuego {
         escena.dispose();
 
         //Ovni Atrezzo
-        atrezo.dispose();
+        listaOvnis.dispose();
+
 
         //Bonus
         regalos.dispose();
@@ -215,7 +220,7 @@ public class ControladorJuego {
         disparosEmpire.moverse();
 
         // Movemos OvniAtrezo
-        atrezo.moverse();
+        listaOvnis.moverse();
 
         //Movemos bonus
         regalos.moverse();
@@ -302,7 +307,7 @@ public class ControladorJuego {
         disparosEmpire = new RafagaEnemigos(Gdx.graphics.getHeight());
 
         // creamos ovni atrezo
-        atrezo = new OvniAtrezo( 100f);
+        listaOvnis = new GrupoDeAtrezo(100);
 
         // creamos regalo
         regalos = new EscuadronBonus();
@@ -326,13 +331,16 @@ public class ControladorJuego {
         empire.pintarse(batch);
 
         // Pintar ovni atrezo
-        if (atrezo.getPosY()>Gdx.graphics.getHeight()) {
-            atrezo.dispose();
-            atrezo = new OvniAtrezo( atrezoX);
+        if (listaOvnis.getPosY() > Gdx.graphics.getHeight()) {
+            listaOvnis.dispose();
+            listaOvnis = new GrupoDeAtrezo(100);
         } else {
-            atrezo.pintarse(batch);
-            atrezo.moverse();
+            listaOvnis.moverse();
+            listaOvnis.pintarse(batch);
         }
+
+
+
         // Pintar Bonus
         for (Bonus mibonus :regalos.listaBonus) {
             if (mibonus.getPosY() < 0) {
@@ -342,9 +350,9 @@ public class ControladorJuego {
                 mibonus.moverse();
             }
         }
-        /*if (regalos.listaBonus.size()==0) {
+        if (regalos.listaBonus.get(0).getPosY()<0) {
             regalos =  new EscuadronBonus();
-        }*/
+        }
     }
 }
 
